@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
+    environment:
+      - BACKEND_PORT=8000
+      - AI_SERVICE_URL=http://ai_services:8001
+      - JWT_SECRET_KEY=dev_secret_key_netra_1234567890
+      - JWT_ALGORITHM=HS256
+      - FIREBASE_PROJECT_ID=netra-surveillance-mock
+      - ALLOWED_CORS_ORIGINS=http://localhost:5173,http://localhost:3000
+    depends_on:
+      - ai_services
+
+  ai_services:
+    build:
+      context: ./ai_services
+      dockerfile: Dockerfile
+    ports:
+      - "8001:8001"
+    volumes:
+      - ./ai_services:/app
+      - yolo_weights:/root/.config/Ultralytics
+    environment:
+      - AI_SERVICE_PORT=8001
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "5173:5173"
+    environment:
+      - VITE_API_URL=http://localhost:8000
+      - VITE_AI_URL=http://localhost:8001
+    depends_on:
+      - backend
+
+volumes:
+  yolo_weights:

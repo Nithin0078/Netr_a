@@ -1,0 +1,36 @@
+# NETRA Git Ignore Manifest
+
+# Credentials and secrets
+.env
+.env.local
+.env.production
+firebase-key.json
+backend/firebase-key.json
+
+# Local databases and media storage
+mock_database.json
+media_storage/
+
+# Python environment and compilation
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.venv/
+pip-log.txt
+pip-delete-this-directory.txt
+.pytest_cache/
+
+# Node.js bundles and dependencies
+node_modules/
+dist/
+.vite/
+.vercel/
+
+# OS Specific files
+.DS_Store
+Thumbs.db
+.env.example

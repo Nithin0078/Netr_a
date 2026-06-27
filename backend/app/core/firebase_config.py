@@ -171,8 +171,26 @@ class MockFirestoreDatabase:
 
 
 try:
-    # Check if Firebase credentials are fully defined
-    if settings.FIREBASE_CLIENT_EMAIL and settings.FIREBASE_PRIVATE_KEY:
+    # 1. Check if a local firebase-key.json service account credentials file exists
+    key_path = os.path.join(os.getcwd(), "firebase-key.json")
+    backend_key_path = os.path.join(os.getcwd(), "backend", "firebase-key.json")
+    
+    selected_key_path = None
+    if os.path.exists(key_path):
+        selected_key_path = key_path
+    elif os.path.exists(backend_key_path):
+        selected_key_path = backend_key_path
+        
+    if selected_key_path:
+        cred = credentials.Certificate(selected_key_path)
+        firebase_admin.initialize_app(cred, {
+            'storageBucket': settings.FIREBASE_STORAGE_BUCKET
+        })
+        db = firestore.client()
+        firebase_initialized = True
+        logger.info(f"Firebase Admin SDK successfully initialized using key file: {selected_key_path}")
+    # 2. Fallback: Check if Firebase credentials are fully defined in settings
+    elif settings.FIREBASE_CLIENT_EMAIL and settings.FIREBASE_PRIVATE_KEY:
         # Prepare private key formatting (fixing newlines)
         private_key = settings.FIREBASE_PRIVATE_KEY.replace("\\n", "\n")
         cred_dict = {
@@ -188,9 +206,9 @@ try:
         })
         db = firestore.client()
         firebase_initialized = True
-        logger.info("Firebase Admin SDK successfully initialized.")
+        logger.info("Firebase Admin SDK successfully initialized via settings variables.")
     else:
-        logger.warning("Firebase credentials missing in environment. Falling back to local Mock Firestore.")
+        logger.warning("Firebase credentials missing (no key file or environment variables). Falling back to local Mock Firestore.")
         db = MockFirestoreDatabase()
 except Exception as e:
     logger.error(f"Firebase initialization failed: {e}. Falling back to local Mock Firestore.")

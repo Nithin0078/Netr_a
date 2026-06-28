@@ -9,7 +9,7 @@ import {
 } from 'lucide-react';
 
 const Layout = () => {
-  const { user, logout } = useAuth();
+  const { user, logout, changeRole } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   
@@ -164,6 +164,53 @@ const Layout = () => {
                 {user.role} {user.badge_number && `(Badge: ${user.badge_number})`}
               </div>
             </div>
+          </div>
+          {/* Mock Role Switcher (Auth Bypassed) */}
+          <div style={{
+            background: 'rgba(0, 240, 255, 0.03)',
+            border: '1px solid rgba(0, 240, 255, 0.15)',
+            borderRadius: '8px',
+            padding: '10px',
+            marginTop: '4px',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '6px'
+          }}>
+            <span style={{ fontSize: '10px', color: 'var(--accent-cyan)', fontWeight: 'bold', letterSpacing: '0.05em' }}>
+              TACTICAL ROLE SWITCHER
+            </span>
+            <select
+              value={user.role}
+              onChange={async (e) => {
+                const newRole = e.target.value;
+                const updatedUser = await changeRole(newRole);
+                if (updatedUser) {
+                  if (newRole === 'Citizen') {
+                    navigate('/citizen/dashboard');
+                  } else {
+                    navigate('/police/dashboard');
+                  }
+                }
+              }}
+              style={{
+                background: '#0c0f16',
+                color: '#fff',
+                border: '1px solid rgba(255,255,255,0.1)',
+                borderRadius: '4px',
+                padding: '6px',
+                fontSize: '12px',
+                cursor: 'pointer',
+                fontFamily: 'var(--font-mono)',
+                outline: 'none',
+                width: '100%'
+              }}
+            >
+              <option value="Citizen">Citizen Portal</option>
+              <option value="Police Officer">Police Officer</option>
+              <option value="Investigator">Investigator</option>
+              <option value="Supervisor">Supervisor</option>
+              <option value="Admin">Admin Console</option>
+            </select>
           </div>
           <button onClick={handleLogout} className="btn btn-secondary" style={{ width: '100%', padding: '10px' }}>
             <LogOut size={16} />

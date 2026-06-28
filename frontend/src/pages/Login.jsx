@@ -49,6 +49,22 @@ const Login = () => {
     }
   };
 
+  const handleQuickLogin = async (role) => {
+    setError('');
+    setSubmitting(true);
+    try {
+      const email = role === 'Citizen' ? 'citizen@netra.gov' : 'admin@netra.gov';
+      const res = await login(email, 'password');
+      if (res.success) {
+        redirectUser(res.role);
+      }
+    } catch (err) {
+      setError(err);
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
   return (
     <div style={{
       display: 'flex',
@@ -163,6 +179,37 @@ const Login = () => {
             {submitting ? 'PROCESSING SECURE GRID...' : mfaRequired ? 'VERIFY SECURITY KEY' : 'INITIATE CONNECTION'}
           </button>
         </form>
+
+        <div style={{
+          margin: '24px 0 16px',
+          borderTop: '1px solid rgba(255, 255, 255, 0.08)',
+          paddingTop: '20px',
+          textAlign: 'center'
+        }}>
+          <span style={{ fontSize: '10px', color: 'var(--text-muted)', display: 'block', marginBottom: '12px', letterSpacing: '0.1em', fontWeight: 'bold' }}>
+            DEMO BYPASS OPTIONS
+          </span>
+          <div style={{ display: 'flex', gap: '10px' }}>
+            <button
+              onClick={() => handleQuickLogin('Citizen')}
+              type="button"
+              disabled={submitting}
+              className="btn btn-secondary"
+              style={{ flex: 1, padding: '10px', fontSize: '12px', border: '1px solid rgba(0, 240, 255, 0.2)' }}
+            >
+              Citizen Node
+            </button>
+            <button
+              onClick={() => handleQuickLogin('Admin')}
+              type="button"
+              disabled={submitting}
+              className="btn btn-secondary"
+              style={{ flex: 1, padding: '10px', fontSize: '12px', border: '1px solid rgba(0, 230, 118, 0.2)' }}
+            >
+              Police Command
+            </button>
+          </div>
+        </div>
 
         <div style={{ marginTop: '24px', textAlign: 'center', fontSize: '13px', color: 'var(--text-secondary)' }}>
           {!mfaRequired ? (

@@ -17,7 +17,7 @@ class Settings(BaseSettings):
     # Firebase settings
     FIREBASE_API_KEY: str = ""
     FIREBASE_AUTH_DOMAIN: str = ""
-    FIREBASE_PROJECT_ID: str = "netra-surveillance"
+    FIREBASE_PROJECT_ID: str = ""
     FIREBASE_STORAGE_BUCKET: str = ""
     FIREBASE_MESSAGING_SENDER_ID: str = ""
     FIREBASE_APP_ID: str = ""

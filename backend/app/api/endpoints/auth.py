@@ -14,7 +14,7 @@ router = APIRouter()
 @router.post("/register", response_model=TokenResponse)
 async def register_citizen(user_in: UserRegister, request: Request):
     """
-    Public registration endpoint for Citizens.
+    Public registration endpoint for Citizens and Police.
     """
     user_ref = db.collection("users")
     exists_query = user_ref.where("email", "==", user_in.email).get()
@@ -29,18 +29,19 @@ async def register_citizen(user_in: UserRegister, request: Request):
         import datetime
         created_at = datetime.datetime.utcnow().isoformat()
         
+        role = user_in.role if user_in.role in UserRoles.ALL else UserRoles.CITIZEN
         user_data = {
             "uid": uid,
             "email": user_in.email,
             "hashed_password": get_password_hash(user_in.password),
             "full_name": user_in.full_name,
             "phone_number": user_in.phone_number,
-            "role": UserRoles.CITIZEN,
+            "role": role,
             "mfa_enabled": False,
             "mfa_secret": "",
             "created_at": created_at,
-            "badge_number": None,
-            "department": None
+            "badge_number": user_in.badge_number if role != UserRoles.CITIZEN else None,
+            "department": user_in.department if role != UserRoles.CITIZEN else None
         }
         db.collection("users").document(uid).set(user_data)
         
@@ -49,7 +50,7 @@ async def register_citizen(user_in: UserRegister, request: Request):
             operator_uid=uid,
             operator_email=user_in.email,
             action="USER_REGISTER",
-            details="Citizen account self-registered",
+            details=f"Account self-registered as {role}",
             ip_address=request.client.host if request.client else "unknown"
         )
 

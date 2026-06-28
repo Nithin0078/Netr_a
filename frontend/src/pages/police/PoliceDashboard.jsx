@@ -266,7 +266,7 @@ const PoliceDashboard = () => {
                 
                 {streamBypass && (
                   <div style={{ position: 'absolute', top: '12px', right: '12px', background: 'rgba(255,23,68,0.85)', padding: '6px 12px', borderRadius: '4px', fontSize: '10px', fontWeight: 'bold', letterSpacing: '0.1em' }}>
-                    SUPERVISOR BYPASS ACTIVE
+                    PRIVILEGED BYPASS ACTIVE
                   </div>
                 )}
               </div>

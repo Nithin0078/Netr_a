@@ -7,10 +7,10 @@ from app.models.schemas import AuditLogResponse
 
 router = APIRouter()
 
-@router.get("/", response_model=List[AuditLogResponse], dependencies=[Depends(RoleChecker([UserRoles.SUPERVISOR, UserRoles.ADMIN]))])
+@router.get("/", response_model=List[AuditLogResponse], dependencies=[Depends(RoleChecker([UserRoles.ADMIN]))])
 async def get_audit_trail():
     """
-    Supervisor and Admin only: Retrieve all audit logs in descending chronological order.
+    Admin only: Retrieve all audit logs in descending chronological order.
     """
     logs_snap = db.collection("audit_logs").order_by("timestamp", direction="DESCENDING").get()
     
@@ -23,7 +23,7 @@ async def get_audit_trail():
     return logs
 
 
-@router.get("/verify", dependencies=[Depends(RoleChecker([UserRoles.SUPERVISOR, UserRoles.ADMIN]))])
+@router.get("/verify", dependencies=[Depends(RoleChecker([UserRoles.ADMIN]))])
 async def verify_audit_ledger():
     """
     Runs block verification across the complete audit ledger database.

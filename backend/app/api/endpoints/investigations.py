@@ -9,7 +9,7 @@ from app.models.schemas import CaseCreate, CaseUpdate, CaseResponse, EvidenceCre
 
 router = APIRouter()
 
-@router.post("/cases", response_model=CaseResponse, dependencies=[Depends(RoleChecker([UserRoles.SUPERVISOR, UserRoles.ADMIN]))])
+@router.post("/cases", response_model=CaseResponse, dependencies=[Depends(RoleChecker([UserRoles.ADMIN]))])
 async def create_investigation_case(
     case_in: CaseCreate,
     request: Request,
@@ -99,7 +99,7 @@ async def get_case_details(
     return CaseResponse(**case_data)
 
 
-@router.put("/cases/{case_id}", response_model=CaseResponse, dependencies=[Depends(RoleChecker([UserRoles.INVESTIGATOR, UserRoles.SUPERVISOR, UserRoles.ADMIN]))])
+@router.put("/cases/{case_id}", response_model=CaseResponse, dependencies=[Depends(RoleChecker([UserRoles.POLICE_OFFICER, UserRoles.ADMIN]))])
 async def update_case(
     case_id: str,
     case_update: CaseUpdate,
@@ -146,7 +146,7 @@ async def update_case(
     return CaseResponse(**updated_doc)
 
 
-@router.post("/cases/{case_id}/evidence", response_model=CaseResponse, dependencies=[Depends(RoleChecker([UserRoles.INVESTIGATOR, UserRoles.SUPERVISOR, UserRoles.ADMIN]))])
+@router.post("/cases/{case_id}/evidence", response_model=CaseResponse, dependencies=[Depends(RoleChecker([UserRoles.POLICE_OFFICER, UserRoles.ADMIN]))])
 async def add_evidence_to_case(
     case_id: str,
     evidence_in: EvidenceCreate,

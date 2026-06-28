@@ -28,7 +28,7 @@ const InvestigationWorkflow = () => {
   const [evidenceUrl, setEvidenceUrl] = useState('');
   const [evidenceType, setEvidenceType] = useState('Image');
 
-  const isSupervisorOrAdmin = ['Supervisor', 'Admin'].includes(user?.role);
+  const isSupervisorOrAdmin = ['Admin'].includes(user?.role);
 
   const fetchData = async () => {
     try {

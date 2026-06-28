@@ -16,12 +16,10 @@ security_bearer = HTTPBearer(auto_error=False)
 class UserRoles:
     CITIZEN = "Citizen"
     POLICE_OFFICER = "Police Officer"
-    INVESTIGATOR = "Investigator"
-    SUPERVISOR = "Supervisor"
     ADMIN = "Admin"
 
-    ALL_POLICE = [POLICE_OFFICER, INVESTIGATOR, SUPERVISOR, ADMIN]
-    ALL = [CITIZEN, POLICE_OFFICER, INVESTIGATOR, SUPERVISOR, ADMIN]
+    ALL_POLICE = [POLICE_OFFICER, ADMIN]
+    ALL = [CITIZEN, POLICE_OFFICER, ADMIN]
 
 # --- Hashing Helpers ---
 def verify_password(plain_password: str, hashed_password: str) -> bool:

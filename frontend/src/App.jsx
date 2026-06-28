@@ -91,11 +91,11 @@ const App = () => {
           <Route path="profile" element={<ProfileSettings />} />
         </Route>
 
-        {/* Police Dashboard (Requires Police Officer, Investigator, Supervisor, Admin) */}
+        {/* Police Dashboard (Requires Police Officer, Admin) */}
         <Route
           path="/police"
           element={
-            <ProtectedRoute allowedRoles={['Police Officer', 'Investigator', 'Supervisor', 'Admin']}>
+            <ProtectedRoute allowedRoles={['Police Officer', 'Admin']}>
               <Layout />
             </ProtectedRoute>
           }

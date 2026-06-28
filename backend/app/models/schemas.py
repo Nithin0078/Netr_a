@@ -8,6 +8,9 @@ class UserRegister(BaseModel):
     password: str = Field(..., min_length=6)
     full_name: str
     phone_number: str
+    role: Optional[str] = "Citizen"
+    badge_number: Optional[str] = None
+    department: Optional[str] = None
 
 class UserCreatePolice(BaseModel):
     email: EmailStr
@@ -16,7 +19,7 @@ class UserCreatePolice(BaseModel):
     phone_number: str
     badge_number: str
     department: str
-    role: str = Field("Police Officer", pattern="^(Police Officer|Investigator|Supervisor|Admin)$")
+    role: str = Field("Police Officer", pattern="^(Police Officer|Admin)$")
 
 class UserLogin(BaseModel):
     email: EmailStr

@@ -71,8 +71,8 @@ const Layout = () => {
     { label: 'Camera Requests', path: '/police/requests', icon: <Video size={20} /> },
   ];
 
-  // Supervisor & Admin extra paths
-  if (['Supervisor', 'Admin'].includes(user.role)) {
+  // Admin extra paths
+  if (user.role === 'Admin') {
     policeLinks.push({
       label: 'Audit Trail',
       path: '/police/audit',
@@ -207,8 +207,6 @@ const Layout = () => {
             >
               <option value="Citizen">Citizen Portal</option>
               <option value="Police Officer">Police Officer</option>
-              <option value="Investigator">Investigator</option>
-              <option value="Supervisor">Supervisor</option>
               <option value="Admin">Admin Console</option>
             </select>
           </div>

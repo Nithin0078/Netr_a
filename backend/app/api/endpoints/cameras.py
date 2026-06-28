@@ -309,8 +309,8 @@ async def authorize_stream_view(
     # Validate access requests
     uid = current_user.get("uid")
     
-    # Exception: Admins/Supervisors can view with auto-auditing (bypass with warning)
-    # But standard Officers and Investigators require a valid active approval.
+    # Exception: Admins can view with auto-auditing (bypass with warning)
+    # But standard Officers require a valid active approval.
     requests_snap = db.collection("access_requests") \
         .where("camera_id", "==", camera_id) \
         .where("requested_by_uid", "==", uid) \
@@ -326,8 +326,8 @@ async def authorize_stream_view(
             valid_access = True
             break
             
-    # Bypassing for Admin/Supervisor if no request exists, but with CRITICAL audit logs
-    is_privileged_bypass = current_user.get("role") in [UserRoles.ADMIN, UserRoles.SUPERVISOR]
+    # Bypassing for Admin if no request exists, but with CRITICAL audit logs
+    is_privileged_bypass = current_user.get("role") == UserRoles.ADMIN
     
     if not valid_access and not is_privileged_bypass:
         raise HTTPException(
@@ -339,7 +339,7 @@ async def authorize_stream_view(
     action = "CAMERA_STREAM_BYPASS" if (not valid_access and is_privileged_bypass) else "CAMERA_STREAM_VIEW"
     details = f"Officer viewed live camera: '{cam_data.get('name')}'"
     if not valid_access and is_privileged_bypass:
-        details = f"PRIVILEGED BYPASS: Supervisor/Admin viewed camera: '{cam_data.get('name')}' without prior approved request."
+        details = f"PRIVILEGED BYPASS: Admin viewed camera: '{cam_data.get('name')}' without prior approved request."
         
     AuditService.log_event(
         operator_uid=uid,

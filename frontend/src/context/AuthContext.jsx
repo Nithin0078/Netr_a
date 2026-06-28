@@ -64,7 +64,7 @@ export const AuthProvider = ({ children }) => {
           setUser(res.data);
         } catch (e) {
           console.error("Auth initialization failed, using local mock:", e);
-          const role = ['Citizen', 'Police Officer', 'Investigator', 'Supervisor', 'Admin'].includes(token) ? token : 'Admin';
+          const role = ['Citizen', 'Police Officer', 'Admin'].includes(token) ? token : 'Admin';
           setUser({
             uid: `mock_${role.toLowerCase().replace(' ', '_')}_uid`,
             email: `mock_${role.toLowerCase().replace(' ', '_')}@netra.gov`,
@@ -160,33 +160,35 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const register = async (fullName, email, password, phoneNumber) => {
+  const register = async (fullName, email, password, phoneNumber, role = 'Citizen', badgeNumber = null, department = null) => {
     try {
       const res = await axios.post('/auth/register', {
         full_name: fullName,
         email,
         password,
-        phone_number: phoneNumber
+        phone_number: phoneNumber,
+        role: role,
+        badge_number: badgeNumber,
+        department: department
       });
-      const { access_token, refresh_token, role } = res.data;
+      const { access_token, refresh_token, role: resRole } = res.data;
       storeTokens(access_token, refresh_token);
       
       const userRes = await axios.get('/users/me');
       setUser(userRes.data);
-      return { success: true, role };
+      return { success: true, role: resRole };
     } catch (e) {
       console.warn("Backend registration failed, using local auth:", e);
-      const role = 'Citizen';
       storeTokens(role, role);
       const mockUser = {
-        uid: 'mock_citizen_uid',
+        uid: `mock_${role.toLowerCase().replace(' ', '_')}_uid`,
         email,
         full_name: fullName,
         phone_number: phoneNumber,
         role: role,
         mfa_enabled: false,
-        badge_number: null,
-        department: null
+        badge_number: role !== 'Citizen' ? (badgeNumber || 'BADGE-9999') : null,
+        department: role !== 'Citizen' ? (department || 'Netra Central Command') : null
       };
       setUser(mockUser);
       return { success: true, role };

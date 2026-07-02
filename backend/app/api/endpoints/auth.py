@@ -13,6 +13,8 @@ router = APIRouter()
 
 @router.post("/register", response_model=TokenResponse)
 async def register_citizen(user_in: UserRegister, request: Request):
+    print("🔥 Register endpoint called")
+    print(user_in.model_dump())
     """
     Public registration endpoint for Citizens and Police.
     """
@@ -43,16 +45,30 @@ async def register_citizen(user_in: UserRegister, request: Request):
             "badge_number": user_in.badge_number if role != UserRoles.CITIZEN else None,
             "department": user_in.department if role != UserRoles.CITIZEN else None
         }
-        db.collection("users").document(uid).set(user_data)
         
+        print("Writing user to Firestore...")
+        print(user_data)
+
+        db.collection("users").document(uid).set(user_data)
+
+        print("User written successfully!")
+
         # Audit log
         AuditService.log_event(
             operator_uid=uid,
             operator_email=user_in.email,
-            action="USER_REGISTER",
-            details=f"Account self-registered as {role}",
-            ip_address=request.client.host if request.client else "unknown"
-        )
+    action="USER_REGISTER",
+    details=f"Account self-registered as {role}",
+    ip_address=request.client.host if request.client else "unknown"
+)
+        # Audit log
+        #AuditService.log_event(
+            #operator_uid=uid,
+            #operator_email=user_in.email,
+            #action="USER_REGISTER",
+            #details=f"Account self-registered as {role}",
+            #ip_address=request.client.host if request.client else "unknown"
+        #)
 
     # Generate JWT
     access_token = create_access_token({"uid": uid, "role": user_data.get("role", UserRoles.CITIZEN), "email": user_in.email})

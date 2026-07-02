@@ -9,8 +9,8 @@ axios.defaults.baseURL = `${API_URL}/api`;
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [token, setToken] = useState(localStorage.getItem('netra_access_token') || 'Admin');
-  const [refreshToken, setRefreshToken] = useState(localStorage.getItem('netra_refresh_token') || 'Admin');
+  const [token, setToken] = useState(localStorage.getItem('netra_access_token') || null);
+  const [refreshToken, setRefreshToken] = useState(localStorage.getItem('netra_refresh_token') || null);
   const [loading, setLoading] = useState(true);
 
   // Set Authorization Header
@@ -77,19 +77,7 @@ export const AuthProvider = ({ children }) => {
           });
         }
       } else {
-        const defaultRole = 'Admin';
-        setUser({
-          uid: 'mock_admin_uid',
-          email: 'mock_admin@netra.gov',
-          full_name: 'Mock Admin',
-          phone_number: "+15550199",
-          role: defaultRole,
-          mfa_enabled: false,
-          badge_number: 'BADGE-9999',
-          department: 'Netra Central Command'
-        });
-        setToken(defaultRole);
-        localStorage.setItem('netra_access_token', defaultRole);
+        setUser(null);
       }
       setLoading(false);
     };

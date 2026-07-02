@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { useAuth } from './context/AuthContext';
@@ -44,7 +45,7 @@ const ProtectedRoute = ({ children, allowedRoles }) => {
   }
 
   if (!user) {
-    return <Navigate to="/login" replace />;
+    return <Navigate to="/register" replace />;
   }
 
   if (allowedRoles && !allowedRoles.includes(user.role)) {
@@ -60,7 +61,7 @@ const ProtectedRoute = ({ children, allowedRoles }) => {
 const RootRedirect = () => {
   const { user, loading } = useAuth();
   if (loading) return null;
-  if (!user) return <Navigate to="/login" replace />;
+  if (!user) return <Navigate to="/register" replace />;
   return user.role === 'Citizen' ? (
     <Navigate to="/citizen/dashboard" replace />
   ) : (

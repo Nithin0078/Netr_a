@@ -16,7 +16,7 @@ app = FastAPI(
 # 1. Custom Middlewares
 app.add_middleware(RateLimitMiddleware)
 app.add_middleware(RequestLoggingMiddleware)
-
+print("CORS Origins:", settings.cors_origins_list)
 # 2. CORS Configurations
 app.add_middleware(
     CORSMiddleware,
@@ -45,4 +45,4 @@ def read_root():
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run("main:app", host="0.0.0.0", port=settings.BACKEND_PORT, reload=True)
+    uvicorn.run("app.main:app", host="0.0.0.0", port=settings.BACKEND_PORT, reload=True)

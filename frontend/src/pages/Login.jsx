@@ -6,13 +6,13 @@ import { Eye, ShieldAlert, KeyRound, Mail, Shield, User } from 'lucide-react';
 const Login = () => {
   const { login, verifyMfa } = useAuth();
   const navigate = useNavigate();
-  
+
   const [selectedRole, setSelectedRole] = useState('Citizen');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [mfaCode, setMfaCode] = useState('');
   const [mfaRequired, setMfaRequired] = useState(false);
-  
+
   const [error, setError] = useState('');
   const [submitting, setSubmitting] = useState(false);
 
@@ -54,7 +54,7 @@ const Login = () => {
     setError('');
     setSubmitting(true);
     try {
-      const email = role === 'Citizen' ? 'citizen@gmail.com' : 'admin@netra.gov';
+      const email = role === 'Citizen' ? '@gmail.com' : '@netra.gov';
       const res = await login(email, 'password');
       if (res.success) {
         redirectUser(res.role);
@@ -76,28 +76,28 @@ const Login = () => {
       fontFamily: 'var(--font-body)',
       padding: '24px'
     }}>
-      <div 
-        className="card-glass animate-fade-in" 
-        style={{ 
-          width: '100%', 
-          maxWidth: '440px', 
+      <div
+        className="card-glass animate-fade-in"
+        style={{
+          width: '100%',
+          maxWidth: '440px',
           padding: '40px',
           borderColor: selectedRole === 'Citizen' ? 'rgba(0, 240, 255, 0.25)' : 'rgba(0, 230, 118, 0.25)',
           boxShadow: selectedRole === 'Citizen' ? '0 0 25px rgba(0, 240, 255, 0.08)' : '0 0 25px rgba(0, 230, 118, 0.08)',
           transition: 'var(--transition-smooth)'
         }}
       >
-        
+
         {/* Title */}
         <div style={{ textAlign: 'center', marginBottom: '24px' }}>
           <div style={{
             display: 'inline-flex',
-            background: selectedRole === 'Citizen' 
+            background: selectedRole === 'Citizen'
               ? 'linear-gradient(135deg, rgba(0, 240, 255, 0.1), rgba(0, 102, 255, 0.1))'
               : 'linear-gradient(135deg, rgba(0, 230, 118, 0.1), rgba(0, 102, 255, 0.1))',
             padding: '16px',
             borderRadius: '16px',
-            border: selectedRole === 'Citizen' 
+            border: selectedRole === 'Citizen'
               ? '1px solid rgba(0, 240, 255, 0.2)'
               : '1px solid rgba(0, 230, 118, 0.2)',
             marginBottom: '16px',
@@ -107,10 +107,10 @@ const Login = () => {
             <Eye size={32} color={selectedRole === 'Citizen' ? '#00f0ff' : '#00e676'} />
           </div>
           <h2 style={{ fontSize: '24px', fontWeight: '800', fontFamily: 'var(--font-display)' }}>NETRA LOG-IN</h2>
-          <span style={{ 
-            fontSize: '11px', 
-            color: selectedRole === 'Citizen' ? 'var(--accent-cyan)' : 'var(--accent-emerald)', 
-            letterSpacing: '0.15em', 
+          <span style={{
+            fontSize: '11px',
+            color: selectedRole === 'Citizen' ? 'var(--accent-cyan)' : 'var(--accent-emerald)',
+            letterSpacing: '0.15em',
             fontWeight: 'bold',
             transition: 'var(--transition-smooth)'
           }}>
@@ -150,7 +150,7 @@ const Login = () => {
             }}
           >
             <User size={16} />
-            Citizen Node
+            Citizen
           </button>
           <button
             type="button"
@@ -175,7 +175,7 @@ const Login = () => {
             }}
           >
             <Shield size={16} />
-            Police Command
+            Police
           </button>
         </div>
 
@@ -202,7 +202,7 @@ const Login = () => {
             <>
               <div className="form-group">
                 <label className="form-label">
-                  {selectedRole === 'Citizen' ? 'Public Node Email' : 'Tactical Access Email'}
+                  {selectedRole === 'Citizen' ? 'Citizen Email' : ' Email'}
                 </label>
                 <div style={{ position: 'relative' }}>
                   {selectedRole === 'Citizen' ? (
@@ -216,8 +216,8 @@ const Login = () => {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     className="form-input"
-                    placeholder={selectedRole === 'Citizen' ? "citizen@gmail.com" : "officer@netra.gov"}
-                    style={{ 
+                    placeholder={selectedRole === 'Citizen' ? "@gmail.com" : "@netra.gov"}
+                    style={{
                       paddingLeft: '42px',
                       borderColor: selectedRole === 'Citizen' ? '' : 'rgba(0, 230, 118, 0.15)'
                     }}
@@ -226,7 +226,7 @@ const Login = () => {
               </div>
 
               <div className="form-group">
-                <label className="form-label">Encryption Password</label>
+                <label className="form-label">Password</label>
                 <div style={{ position: 'relative' }}>
                   <KeyRound size={16} color="var(--text-muted)" style={{ position: 'absolute', left: '14px', top: '15px' }} />
                   <input
@@ -266,76 +266,42 @@ const Login = () => {
             type="submit"
             disabled={submitting}
             className="btn"
-            style={{ 
-              width: '100%', 
-              padding: '14px', 
+            style={{
+              width: '100%',
+              padding: '14px',
               marginTop: '10px',
-              background: selectedRole === 'Citizen' 
-                ? 'linear-gradient(135deg, var(--accent-cyan), var(--accent-blue))' 
+              background: selectedRole === 'Citizen'
+                ? 'linear-gradient(135deg, var(--accent-cyan), var(--accent-blue))'
                 : 'linear-gradient(135deg, var(--accent-emerald), var(--accent-blue))',
               color: '#000',
               boxShadow: submitting ? 'none' : (selectedRole === 'Citizen' ? '0 0 15px rgba(0, 240, 255, 0.25)' : '0 0 15px rgba(0, 230, 118, 0.25)'),
               transition: 'var(--transition-smooth)'
             }}
           >
-            {submitting 
-              ? 'PROCESSING SECURE GRID...' 
-              : mfaRequired 
-                ? 'VERIFY SECURITY KEY' 
-                : selectedRole === 'Citizen' 
-                  ? 'INITIATE CITIZEN CONNECTION' 
-                  : 'AUTHORIZE COMMAND ACCESS'}
+            {submitting
+              ? 'PROCESSING SECURE GRID...'
+              : mfaRequired
+                ? 'VERIFY SECURITY KEY'
+                : selectedRole === 'Citizen'
+                  ? 'SIGN IN'
+                  : 'AUTHORIZE ACCESS'}
           </button>
         </form>
-
-        <div style={{
-          margin: '24px 0 16px',
-          borderTop: '1px solid rgba(255, 255, 255, 0.08)',
-          paddingTop: '20px',
-          textAlign: 'center'
-        }}>
-          <span style={{ fontSize: '10px', color: 'var(--text-muted)', display: 'block', marginBottom: '12px', letterSpacing: '0.1em', fontWeight: 'bold' }}>
-            DEMO BYPASS OPTIONS
-          </span>
-          <div style={{ display: 'flex', gap: '10px' }}>
-            {selectedRole === 'Citizen' ? (
-              <button
-                onClick={() => handleQuickLogin('Citizen')}
-                type="button"
-                disabled={submitting}
-                className="btn btn-secondary"
-                style={{ flex: 1, padding: '10px', fontSize: '12px', border: '1px solid rgba(0, 240, 255, 0.2)', color: 'var(--accent-cyan)' }}
-              >
-                Citizen Node Bypass
-              </button>
-            ) : (
-              <button
-                onClick={() => handleQuickLogin('Admin')}
-                type="button"
-                disabled={submitting}
-                className="btn btn-secondary"
-                style={{ flex: 1, padding: '10px', fontSize: '12px', border: '1px solid rgba(0, 230, 118, 0.2)', color: 'var(--accent-emerald)' }}
-              >
-                Police Command Bypass
-              </button>
-            )}
-          </div>
-        </div>
 
         <div style={{ marginTop: '24px', textAlign: 'center', fontSize: '13px', color: 'var(--text-secondary)' }}>
           {!mfaRequired ? (
             <p>
               {selectedRole === 'Citizen' ? 'New citizen user?' : 'New police staff?'}{' '}
-              <Link 
-                to={`/register?role=${selectedRole}`} 
-                style={{ 
-                  color: selectedRole === 'Citizen' ? '#00f0ff' : '#00e676', 
-                  textDecoration: 'none', 
+              <Link
+                to={`/register?role=${selectedRole}`}
+                style={{
+                  color: selectedRole === 'Citizen' ? '#00f0ff' : '#00e676',
+                  textDecoration: 'none',
                   fontWeight: 'bold',
                   transition: 'var(--transition-smooth)'
                 }}
               >
-                {selectedRole === 'Citizen' ? 'Create Local Node' : 'Register Command Account'}
+                {selectedRole === 'Citizen' ? 'Create New Account' : 'Register Account'}
               </Link>
             </p>
           ) : (

@@ -51,15 +51,13 @@ class RequestLoggingMiddleware(BaseHTTPMiddleware):
             logger.info(f"Completed: {method} {path} - Status: {response.status_code} - Duration: {duration:.2f}ms")
             return response
         except Exception as exc:
-            duration = (time.time() - start_time) * 1000
-            logger.error(f"Failed: {method} {path} from IP {client_ip} - Duration: {duration:.2f}ms - Error: {str(exc)}")
-            logger.error(traceback.format_exc())
+            import traceback
+            traceback.print_exc()
+
+            raise exc
+            #    status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            #    content={
+            #        "detail": "An internal server error occurred. Please contact system support.",
+            #        "error_class": exc.__class__.__name__
+            #    }
             
-            # Centralized exception handler structure
-            return JSONResponse(
-                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-                content={
-                    "detail": "An internal server error occurred. Please contact system support.",
-                    "error_class": exc.__class__.__name__
-                }
-            )

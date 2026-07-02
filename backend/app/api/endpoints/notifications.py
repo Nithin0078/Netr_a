@@ -11,12 +11,14 @@ async def list_notifications(current_user: dict = Depends(get_current_user)):
     Get notifications for the logged-in user.
     """
     uid = current_user.get("uid")
-    notifications_snap = db.collection("notifications") \
-        .where("user_uid", "==", uid) \
-        .order_by("timestamp", direction="DESCENDING").get()
-        
+    notifications = (
+    db.collection("notifications")
+    .where("user_uid", "==", uid)
+    .get()
+    )
+    
     results = []
-    for doc in notifications_snap:
+    for doc in notifications:
         item = doc.to_dict()
         item["id"] = doc.id
         results.append(item)

@@ -9,6 +9,7 @@ from passlib.context import CryptContext
 from app.core.config import settings
 from app.core.firebase_config import db
 
+
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 security_bearer = HTTPBearer(auto_error=False)
 

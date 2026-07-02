@@ -4,6 +4,7 @@ import json
 import firebase_admin
 from firebase_admin import credentials, firestore, auth
 from app.core.config import settings
+print("🔥 firebase_config.py loaded")
 
 logger = logging.getLogger("netra.firebase")
 logger.setLevel(logging.INFO)
@@ -174,25 +175,37 @@ try:
     # 1. Check if a local firebase-key.json service account credentials file exists
     key_path = os.path.join(os.getcwd(), "firebase-key.json")
     backend_key_path = os.path.join(os.getcwd(), "backend", "firebase-key.json")
-    
+
     selected_key_path = None
     if os.path.exists(key_path):
         selected_key_path = key_path
     elif os.path.exists(backend_key_path):
         selected_key_path = backend_key_path
-        
+
     if selected_key_path:
+        print("✅ Firebase key found:", selected_key_path)
+
         cred = credentials.Certificate(selected_key_path)
-        firebase_admin.initialize_app(cred, {
-            'storageBucket': settings.FIREBASE_STORAGE_BUCKET
-        })
+
+        firebase_admin.initialize_app(
+            cred,
+            {
+                "storageBucket": settings.FIREBASE_STORAGE_BUCKET
+            }
+        )
+
         db = firestore.client()
+
+        print("✅ Connected to Firebase Firestore")
+
         firebase_initialized = True
-        logger.info(f"Firebase Admin SDK successfully initialized using key file: {selected_key_path}")
-    # 2. Fallback: Check if Firebase credentials are fully defined in settings
+        logger.info(
+            f"Firebase Admin SDK successfully initialized using key file: {selected_key_path}"
+        )
+
     elif settings.FIREBASE_CLIENT_EMAIL and settings.FIREBASE_PRIVATE_KEY:
-        # Prepare private key formatting (fixing newlines)
         private_key = settings.FIREBASE_PRIVATE_KEY.replace("\\n", "\n")
+
         cred_dict = {
             "type": "service_account",
             "project_id": settings.FIREBASE_PROJECT_ID,
@@ -200,16 +213,24 @@ try:
             "client_email": settings.FIREBASE_CLIENT_EMAIL,
             "token_uri": "https://oauth2.googleapis.com/token",
         }
+
         cred = credentials.Certificate(cred_dict)
-        firebase_admin.initialize_app(cred, {
-            'storageBucket': settings.FIREBASE_STORAGE_BUCKET
-        })
+
+        firebase_admin.initialize_app(
+            cred,
+            {
+                "storageBucket": settings.FIREBASE_STORAGE_BUCKET
+            }
+        )
+
         db = firestore.client()
         firebase_initialized = True
-        logger.info("Firebase Admin SDK successfully initialized via settings variables.")
+
     else:
-        logger.warning("Firebase credentials missing (no key file or environment variables). Falling back to local Mock Firestore.")
+        print("❌ Firebase credentials missing")
         db = MockFirestoreDatabase()
+
 except Exception as e:
-    logger.error(f"Firebase initialization failed: {e}. Falling back to local Mock Firestore.")
+    print("❌ Firebase initialization failed")
+    print(e)
     db = MockFirestoreDatabase()

@@ -20,7 +20,7 @@ const Register = () => {
   const [badgeNumber, setBadgeNumber] = useState('');
   const [department, setDepartment] = useState('');
   const [policeRole, setPoliceRole] = useState('Police Officer');
-  
+
   const [error, setError] = useState('');
   const [submitting, setSubmitting] = useState(false);
 
@@ -64,28 +64,28 @@ const Register = () => {
       fontFamily: 'var(--font-body)',
       padding: '24px'
     }}>
-      <div 
-        className="card-glass animate-fade-in" 
-        style={{ 
-          width: '100%', 
-          maxWidth: '480px', 
+      <div
+        className="card-glass animate-fade-in"
+        style={{
+          width: '100%',
+          maxWidth: '480px',
           padding: '40px',
           borderColor: selectedRole === 'Citizen' ? 'rgba(0, 240, 255, 0.25)' : 'rgba(0, 230, 118, 0.25)',
           boxShadow: selectedRole === 'Citizen' ? '0 0 25px rgba(0, 240, 255, 0.08)' : '0 0 25px rgba(0, 230, 118, 0.08)',
           transition: 'var(--transition-smooth)'
         }}
       >
-        
+
         {/* Title */}
         <div style={{ textAlign: 'center', marginBottom: '24px' }}>
           <div style={{
             display: 'inline-flex',
-            background: selectedRole === 'Citizen' 
+            background: selectedRole === 'Citizen'
               ? 'linear-gradient(135deg, rgba(0, 240, 255, 0.1), rgba(0, 102, 255, 0.1))'
               : 'linear-gradient(135deg, rgba(0, 230, 118, 0.1), rgba(0, 102, 255, 0.1))',
             padding: '16px',
             borderRadius: '16px',
-            border: selectedRole === 'Citizen' 
+            border: selectedRole === 'Citizen'
               ? '1px solid rgba(0, 240, 255, 0.2)'
               : '1px solid rgba(0, 230, 118, 0.2)',
             marginBottom: '16px',
@@ -97,10 +97,10 @@ const Register = () => {
           <h2 style={{ fontSize: '24px', fontWeight: '800', fontFamily: 'var(--font-display)' }}>
             {selectedRole === 'Citizen' ? 'CREATE CITIZEN NODE' : 'CREATE POLICE PROFILE'}
           </h2>
-          <span style={{ 
-            fontSize: '11px', 
-            color: selectedRole === 'Citizen' ? 'var(--accent-cyan)' : 'var(--accent-emerald)', 
-            letterSpacing: '0.15em', 
+          <span style={{
+            fontSize: '11px',
+            color: selectedRole === 'Citizen' ? 'var(--accent-cyan)' : 'var(--accent-emerald)',
+            letterSpacing: '0.15em',
             fontWeight: 'bold',
             transition: 'var(--transition-smooth)'
           }}>
@@ -198,7 +198,7 @@ const Register = () => {
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
                 className="form-input"
-                placeholder="John Doe"
+                placeholder=""
                 style={{ paddingLeft: '42px' }}
               />
             </div>
@@ -206,7 +206,7 @@ const Register = () => {
 
           <div className="form-group">
             <label className="form-label">
-              {selectedRole === 'Citizen' ? 'Public Node Email' : 'Command Access Email'}
+              {selectedRole === 'Citizen' ? 'Citizen Email' : 'Command Access Email'}
             </label>
             <div style={{ position: 'relative' }}>
               <Mail size={16} color="var(--text-muted)" style={{ position: 'absolute', left: '14px', top: '15px' }} />
@@ -216,7 +216,7 @@ const Register = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="form-input"
-                placeholder={selectedRole === 'Citizen' ? "johndoe@example.com" : "officer@netra.gov"}
+                placeholder={selectedRole === 'Citizen' ? "@example.com" : "officer@netra.gov"}
                 style={{ paddingLeft: '42px' }}
               />
             </div>
@@ -250,7 +250,7 @@ const Register = () => {
                     value={badgeNumber}
                     onChange={(e) => setBadgeNumber(e.target.value)}
                     className="form-input"
-                    placeholder="BADGE-1234"
+                    placeholder="1234"
                     style={{ paddingLeft: '42px' }}
                   />
                 </div>
@@ -280,7 +280,7 @@ const Register = () => {
                     value={policeRole}
                     onChange={(e) => setPoliceRole(e.target.value)}
                     className="form-input"
-                    style={{ 
+                    style={{
                       paddingLeft: '42px',
                       background: 'rgba(10, 12, 16, 0.8)',
                       color: 'var(--text-primary)',
@@ -296,9 +296,7 @@ const Register = () => {
           )}
 
           <div className="form-group">
-            <label className="form-label">
-              {selectedRole === 'Citizen' ? 'Node Encryption Password' : 'Command Encryption Password'}
-            </label>
+            <label className="form-label">Password</label>
             <div style={{ position: 'relative' }}>
               <Lock size={16} color="var(--text-muted)" style={{ position: 'absolute', left: '14px', top: '15px' }} />
               <input
@@ -317,23 +315,23 @@ const Register = () => {
             type="submit"
             disabled={submitting}
             className="btn"
-            style={{ 
-              width: '100%', 
-              padding: '14px', 
+            style={{
+              width: '100%',
+              padding: '14px',
               marginTop: '10px',
-              background: selectedRole === 'Citizen' 
-                ? 'linear-gradient(135deg, var(--accent-cyan), var(--accent-blue))' 
+              background: selectedRole === 'Citizen'
+                ? 'linear-gradient(135deg, var(--accent-cyan), var(--accent-blue))'
                 : 'linear-gradient(135deg, var(--accent-emerald), var(--accent-blue))',
               color: '#000',
               boxShadow: submitting ? 'none' : (selectedRole === 'Citizen' ? '0 0 15px rgba(0, 240, 255, 0.25)' : '0 0 15px rgba(0, 230, 118, 0.25)'),
               transition: 'var(--transition-smooth)'
             }}
           >
-            {submitting 
-              ? 'GENERATING KEYPAIR...' 
-              : selectedRole === 'Citizen' 
-                ? 'REGISTER PUBLIC NODE' 
-                : 'CREATE COMMAND ACCOUNT'}
+            {submitting
+              ? 'GENERATING KEYPAIR...'
+              : selectedRole === 'Citizen'
+                ? 'REGISTER'
+                : 'CREATE ACCOUNT'}
           </button>
         </form>
 

@@ -6,6 +6,9 @@
 .env.production
 firebase-key.json
 backend/firebase-key.json
+backend/.env
+frontend/.env
+firebase.js
 
 # Local databases and media storage
 mock_database.json

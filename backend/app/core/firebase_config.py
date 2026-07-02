@@ -204,6 +204,7 @@ try:
         )
 
     elif settings.FIREBASE_CLIENT_EMAIL and settings.FIREBASE_PRIVATE_KEY:
+        print("✅ Using Firebase environment variables")
         private_key = settings.FIREBASE_PRIVATE_KEY.replace("\\n", "\n")
 
         cred_dict = {

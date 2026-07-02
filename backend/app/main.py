@@ -14,9 +14,9 @@ app = FastAPI(
 )
 
 # 1. Custom Middlewares
-app.add_middleware(RateLimitMiddleware)
-app.add_middleware(RequestLoggingMiddleware)
-print("CORS Origins:", settings.cors_origins_list)
+#app.add_middleware(RateLimitMiddleware)
+#app.add_middleware(RequestLoggingMiddleware)
+
 # 2. CORS Configurations
 app.add_middleware(
     CORSMiddleware,
@@ -25,6 +25,8 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+app.add_middleware(RateLimitMiddleware)
+app.add_middleware(RequestLoggingMiddleware)
 
 # 3. Mount Local Media storage for offline file uploading fallback
 MEDIA_DIR = os.path.join(os.getcwd(), "media_storage")
